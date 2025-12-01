@@ -1,0 +1,761 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Priyesh Choudhary — Portfolio</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Orbitron:wght@600;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --accent: #f2e8c9;
+      --muted: rgba(255,255,255,0.7);
+      --white: #ffffff;
+      --neon: #39ff14; 
+      --neon-strong: rgba(57,255,20,1);
+      --cyber-blue: #00f3ff;
+      --max-width: 1250px;
+      
+      /* Grey Backgrounds */
+      --panel-bg: rgba(35, 35, 35, 0.8); 
+      --panel-border: rgba(255,255,255,0.15);
+      --glass: rgba(20, 20, 20, 0.5);
+      
+      --gap: 24px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    
+    body{
+      margin:0;
+      font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: #050505;
+      color:var(--white);
+      padding:28px;
+      display:flex;
+      justify-content:center;
+      line-height:1.5;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      overflow-x: hidden;
+    }
+
+    /* Background 70% Visible */
+    .bg-wrap{
+        position:fixed;
+        inset:0;
+        z-index:-2;
+        pointer-events:none;
+        background-image: url("back.png"); 
+        background-repeat:no-repeat;
+        background-size:cover;
+        background-position:center;
+        opacity: 0.7; 
+    }
+    .bg-overlay {
+        position: fixed; inset: 0; z-index: -1;
+        background: radial-gradient(circle at center, transparent 20%, rgba(0,0,0,0.7) 90%);
+        pointer-events: none;
+    }
+
+    /* Main Container - Flexible */
+    .container{
+      width:100%;
+      max-width:var(--max-width);
+      padding:32px;
+      border-radius:30px; 
+      backdrop-filter:blur(15px);
+      -webkit-backdrop-filter:blur(15px);
+      background:var(--glass);
+      border:1px solid rgba(255,255,255,0.08);
+      display:flex;
+      gap:var(--gap);
+      align-items:flex-start;
+      box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+      transition:all .25s ease;
+    }
+
+    /* Left column takes remaining space, Right is fixed width but shrinks if needed */
+    .left{flex:1;display:flex;flex-direction:column;gap:20px;min-width:0}
+    .right{width:340px;display:flex;flex-direction:column;gap:20px; flex-shrink: 0;}
+
+    /* Avatar */
+    .avatar{width:110px;height:110px;border-radius:50%; overflow:hidden;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.02);flex-shrink:0; box-shadow: 0 8px 30px rgba(0,0,0,0.4);}
+    .avatar img{width:100%;height:100%;object-fit:cover;display:block}
+
+    /* Typography - Orbitron Blue */
+    h1{margin:0; font-size: 38px; line-height: 1.1; font-family: 'Orbitron', sans-serif;}
+    
+    .role{color:white; font-size:12px; margin-top:8px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; opacity: 0.9;}
+    .muted{color:var(--muted); font-size:13px; font-weight: 400; line-height: 1.6;}
+
+    header.row{display:flex;align-items:center;gap:20px;justify-content:space-between}
+    
+    /* Panels */
+    .panel{
+      padding:22px;
+      border-radius:18px;
+      background:var(--panel-bg);
+      border:1px solid var(--panel-border);
+      font-size:14px;
+      transition: border-color 0.3s ease, background 0.3s ease;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    }
+    .panel:hover {
+      border-color: rgba(0, 243, 255, 0.3);
+      background: rgba(50, 50, 50, 0.9); 
+    }
+    
+    /* --- OVAL SHAPE CLASS --- */
+    .oval-shape {
+        border-radius: 60px !important; 
+        padding: 36px 42px !important; 
+    }
+    .oval-shape::after {
+        border-radius: 58px !important; 
+    }
+
+    /* HEADINGS: Orbitron Blue */
+    .section-title, .panel strong, .roadmap-box h3, .project h4 {
+        display:block;
+        margin-bottom:14px; 
+        font-family: 'Orbitron', sans-serif;
+        font-weight: 800;
+        letter-spacing: 0.5px;
+        color: var(--cyber-blue);
+        text-shadow: 0 0 10px rgba(0, 243, 255, 0.4);
+        transition: all 0.3s ease; 
+        width: fit-content; 
+    }
+    .panel strong { font-size: 18px; margin-bottom: 12px; }
+    
+    /* SPIN CONTAINER (Green Rotating Border) */
+    .spin-container { position: relative; overflow: hidden; z-index: 1; transition: transform 0.2s ease; }
+    .spin-container::before { content: ''; position: absolute; top: 50%; left: 50%; width: 300%; height: 300%; background: conic-gradient(transparent, transparent, transparent, var(--neon) 20%, transparent 25%); transform: translate(-50%, -50%) rotate(0deg); z-index: -2; opacity: 0; transition: opacity 0.3s ease; }
+    .spin-container::after { content: ''; position: absolute; inset: 2px; background: #080808; border-radius: inherit; z-index: -1; }
+    .spin-container:hover::before { opacity: 1; animation: rotate-border 2.5s linear infinite; }
+    .spin-container:hover { box-shadow: 0 0 20px rgba(57,255,20,0.2); }
+    @keyframes rotate-border { 0% { transform: translate(-50%, -50%) rotate(0deg); } 100% { transform: translate(-50%, -50%) rotate(360deg); } }
+
+    /* NAME SPECIFIC */
+    .name-wrap { display: inline-block; padding: 4px 14px; border-radius: 12px; cursor: pointer; background: transparent; }
+    .name-wrap::after { background: #050505; border-radius: 10px; }
+
+    /* PROJECT/PANEL SPECIFIC SPINNING */
+    .rotating-border-panel { border: 1px solid rgba(255,255,255,0.08); }
+    .rotating-border-panel::after { background: rgba(35, 35, 35, 0.95); } 
+    .rotating-border-panel:hover { border-color: transparent; }
+    .rotating-border-panel > * { position: relative; z-index: 2; }
+
+    /* NAME FONT */
+    .name-text { position: relative; z-index: 2; font-family: 'Orbitron', sans-serif; font-weight: 900; letter-spacing: 1px; background-image: linear-gradient(90deg, #00f3ff 0%, #fff 20%, #00f3ff 40%, #00d2ff 60%, #00f3ff 80%, #fff 100%); background-size: 200% auto; color: transparent; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; animation: glitter-flow 3s linear infinite; filter: drop-shadow(0 0 5px rgba(0, 243, 255, 0.3)); }
+    @keyframes glitter-flow { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+    
+    .name-wrap:hover { transform: scale(1.02); }
+    .name-pulse { position:absolute; top:50%; left:50%; width:62px; height:62px; border-radius:50%; transform:translate(-50%,-50%) scale(0); border:2px solid rgba(57,255,20,0.6); opacity:0; pointer-events:none; z-index:0; }
+    .name-pulse.play { animation: name-pulse-anim .9s ease-out forwards; }
+    @keyframes name-pulse-anim { 0% { transform:translate(-50%,-50%) scale(0.15); opacity:0.9; } 100% { transform:translate(-50%,-50%) scale(2.6); opacity:0; } }
+
+    /* Projects Grid */
+    .projects{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+    .project{ padding:18px; border-radius:30px; background:rgba(255,255,255,0.03); border: 1px solid transparent; transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease, background .25s ease; position: relative; overflow: hidden; }
+    .project:hover, .project:focus{ transform:translateY(-4px); box-shadow:0 12px 30px rgba(57, 255, 20, 0.15); border-color: var(--neon); background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(57,255,20,0.05)); }
+    .project h4 { font-size: 16px; margin:0 0 6px 0; color: var(--cyber-blue); }
+    .project p { font-size: 12px; transition: color 0.3s; }
+    .project:hover h4 { color: var(--neon); text-shadow: 0 0 8px rgba(57,255,20,0.5); }
+    .project:hover p { color: rgba(255,255,255,0.9); }
+
+    /* --- STAR TOPOLOGY ROADMAP CSS --- */
+    .roadmap-container { position: relative; padding-top: 20px; }
+    
+    /* Central Hub */
+    .star-hub {
+        width: 80px; height: 80px;
+        background: radial-gradient(circle, var(--cyber-blue), #000);
+        border-radius: 50%;
+        margin: 0 auto 30px auto;
+        position: relative;
+        z-index: 10;
+        box-shadow: 0 0 30px var(--cyber-blue);
+        display: flex; align-items: center; justify-content: center;
+        border: 2px solid #fff;
+    }
+    .star-hub img { width: 40px; height: 40px; filter: brightness(0) invert(1); }
+    
+    /* Grid Layout */
+    .roadmap-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; position: relative; }
+
+    /* Connector Lines */
+    .roadmap-grid::before {
+        content: ''; position: absolute; top: -40px; left: 50%; width: 2px; height: 100%;
+        background: linear-gradient(180deg, var(--cyber-blue) 0%, transparent 100%);
+        transform: translateX(-50%); z-index: 0; opacity: 0.3;
+    }
+
+    .roadmap-box {
+      background: var(--panel-bg); border: 1px solid var(--panel-border); 
+      border-radius: 40px; /* Oval Nodes */
+      padding: 20px 24px; 
+      display: flex; flex-direction: column; justify-content: center;
+      transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); position: relative; overflow: hidden; 
+      cursor: pointer; z-index: 5;
+    }
+    
+    /* Connecting lines Visual trick */
+    .roadmap-box::before {
+        content: ''; position: absolute; 
+        top: 20px; width: 50px; height: 1px; background: var(--cyber-blue); opacity: 0.4;
+        z-index: -1;
+    }
+    .roadmap-box:nth-child(odd)::before { right: -50px; }
+    .roadmap-box:nth-child(even)::before { left: -50px; }
+
+    .roadmap-box:hover {
+      transform: translateY(-4px); border-color: var(--neon);
+      box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
+    }
+    .roadmap-header { display: flex; align-items: center; gap: 14px; position: relative; z-index: 5; width: 100%; }
+    .roadmap-box h3 { margin: 0; font-size: 16px; flex: 1; line-height: 1.3; color: var(--cyber-blue); text-shadow: none; }
+    .topic-icon { width: 32px; height: 32px; object-fit: contain; }
+    .topics-list { list-style-type: none; padding: 0; margin: 0; max-height: 0; overflow: hidden; transition: max-height 0.6s ease; color: var(--muted); font-size: 13px; margin-left: 46px; }
+    .topics-list li { margin-bottom: 6px; padding-left: 10px; position: relative; }
+    .topics-list li::before { content: ''; position: absolute; left: 0; top: 8px; width: 4px; height: 4px; border-radius: 50%; background: var(--neon); }
+    .roadmap-box.active { padding-top: 20px; border-color: var(--cyber-blue); background: rgba(0,0,0,0.8); }
+    .roadmap-box.active .topics-list { max-height: 500px; margin-top: 14px; margin-bottom: 6px; }
+    
+    .roadmap-btn { 
+        padding: 6px 12px; border-radius: 20px; border: 1px solid rgba(0, 243, 255, 0.3); 
+        background: rgba(0,0,0,0.5); color: var(--cyber-blue); font-size: 10px; font-weight: 700; 
+        text-transform: uppercase; z-index: 5; white-space: nowrap; 
+    }
+    .roadmap-box.active .roadmap-btn { background: var(--cyber-blue); color: #000; }
+
+    /* TILE/CERT CSS */
+    .certs{display:flex;flex-direction:column;gap:12px}
+    .tile{ padding:14px 16px; border-radius:12px; border:1px dashed rgba(255,255,255,0.1); background:rgba(0,0,0,0.3); font-size:13px; display:inline-block; transition:all .2s ease; cursor:pointer; color:rgba(255,255,255,0.8); text-align:left; position: relative; }
+    .tile:focus{outline:2px solid rgba(0,243,255,0.3);outline-offset:4px}
+    .tile:hover{ transform:translateY(-3px) scale(1.01); box-shadow:0 8px 20px rgba(0,0,0,0.4); background:rgba(255,255,255,0.05); border-color: var(--cyber-blue); color: #fff; }
+    .tile.tapped{transform:translateY(-3px) scale(1.01);box-shadow:0 8px 30px rgba(0,243,255,0.2); background:linear-gradient(90deg, rgba(0,243,255,0.1), transparent); border-color: var(--cyber-blue);}
+    .certs .tile{font-weight:700;color:var(--white)}
+
+    /* Join Button Area */
+    .join-wrapper{display:inline-block;position:relative}
+    .join-btn{background:rgba(0,0,0,0.6);border:1px solid rgba(57,255,20,0.4);box-shadow:0 0 15px rgba(57,255,20,0.05);color:var(--neon);font-weight:800;padding:14px 24px;border-radius:14px;cursor:pointer;position:relative;z-index:2; transition: all 0.3s ease; letter-spacing: 1px;}
+    .join-btn:hover{box-shadow:0 0 40px rgba(57,255,20,0.3); border-color: var(--neon); transform:translateY(-2px); text-shadow: 0 0 8px rgba(57,255,20,0.6); background:rgba(0,0,0,0.8);}
+
+    /* Modal Styling */
+    .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter: blur(10px); display:none;align-items:center;justify-content:center;z-index:50; animation: fadeIn 0.2s ease-out;}
+    @keyframes fadeIn { from{opacity:0} to{opacity:1}}
+    .modal{width:min(780px,95%);background:#111;border-radius:20px;padding:28px;border:1px solid rgba(57,255,255,0.2);box-shadow:0 25px 80px rgba(0,0,0,0.9)}
+    .modal h3{margin:0 0 12px 0;color:var(--neon); font-size: 24px;}
+    .tabs{display:flex;gap:10px;margin-bottom:16px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px;}
+    .tab{padding:8px 16px;border-radius:8px;color: #888; cursor:pointer; font-weight: 600; transition: color 0.2s;}
+    .tab:hover {color: #fff;}
+    .tab.active{background:rgba(57,255,20,0.1);color: var(--neon); border:1px solid rgba(57,255,20,0.1);}
+    .form-group{display:flex;flex-direction:column;margin-bottom:16px}
+    input[type="text"],input[type="email"],textarea{background:#050505;border:1px solid rgba(255,255,255,0.1);padding:14px;border-radius:12px;color:var(--white);min-width:0; transition: border-color 0.2s; font-family: inherit;}
+    input:focus, textarea:focus {outline:none; border-color: var(--neon);}
+    textarea{min-height:100px;resize:vertical}
+    .neon-submit{background:linear-gradient(90deg,var(--neon),#80ff72);border:none;padding:12px 20px;border-radius:12px;font-weight:800;cursor:pointer; color:#000; transition: transform 0.2s; box-shadow: 0 4px 15px rgba(57,255,20,0.3);}
+    .neon-submit:hover {transform: scale(1.02); box-shadow: 0 4px 25px rgba(57,255,20,0.5);}
+    
+    /* HOLO EFFECT */
+    .holo-wrapper { position:relative; display:inline-block; margin-right:8px; }
+    .holo-effect { position: absolute; top: 50%; left: 50%; width: 220px; height: 220px; border-radius: 50%; transform: translate(-50%, -50%) scale(0); border: 3px solid rgba(0, 200, 255, 0.12); box-shadow: 0 0 20px rgba(0,200,255,0.06); transition: transform .45s cubic-bezier(.2,.9,.2,1), opacity .3s; pointer-events: none; overflow: visible; z-index:1; opacity:0; }
+    .holo-effect.active { transform: translate(-50%, -50%) scale(1); opacity:1; }
+    .holo-effect::before{ content:""; position:absolute; inset:-12px; border-radius:50%; border-top:4px solid rgba(138,43,226,0.9); border-right:4px solid rgba(0,200,255,0.8); border-left:4px solid transparent; border-bottom:4px solid transparent; animation:rotate 2.2s linear infinite; filter: drop-shadow(0 0 8px rgba(138,43,226,0.25)); }
+    .holo-effect::after{ content:""; position:absolute; top:-8px; left:50%; width:12px; height:12px; background: radial-gradient(circle at 30% 30%, #9b59ff, #00e5ff); border-radius:50%; transform:translateX(-50%); animation:orbit 2.2s linear infinite; box-shadow:0 0 12px rgba(0,229,255,0.2),0 0 8px rgba(155,89,255,0.12); }
+    .holo-pulse { position:absolute; top:50%; left:50%; width:42px; height:42px; border-radius:50%; transform:translate(-50%,-50%) scale(0); border:2px solid rgba(155,89,255,0.6); opacity:0.9; pointer-events:none; z-index:0; }
+    .holo-pulse.play { animation: pulse-scale 0.8s ease-out forwards; }
+    @keyframes rotate { 0%{transform:rotate(0)}100%{transform:rotate(360deg)} }
+    @keyframes orbit { 0%{transform:rotate(0) translateX(100px) rotate(0)}100%{transform:rotate(360deg) translateX(100px) rotate(-360deg)} }
+    @keyframes pulse-scale { 0%{transform:translate(-50%,-50%) scale(0.1);opacity:0.9}60%{transform:translate(-50%,-50%) scale(1.4);opacity:0.25}100%{transform:translate(-50%,-50%) scale(2.4);opacity:0} }
+
+    /* Media Queries */
+    @media (max-width: 1100px){:root{--max-width:980px}.right{width:300px}}
+    @media (max-width: 900px){.container{flex-direction:column;padding:24px}.right{width:100%}.projects{grid-template-columns:1fr}.roadmap-grid{grid-template-columns: 1fr;}}
+    @media (max-width:480px){
+        body{padding:14px}
+        .container{padding:20px;border-radius:16px}
+        .avatar{width:80px;height:80px;border-radius:18px}
+        h1{font-size:28px}
+        .role{font-size:11px}
+        .btn{padding:10px 14px;font-size:12px}
+        .tile{padding:12px 14px;font-size:12px}
+    }
+    a.link{color:var(--accent);text-decoration:none;font-weight:600}
+    a.contact-row{display:flex;align-items:center;gap:12px;color:var(--muted);text-decoration:none; padding: 6px 0; transition: transform 0.2s;}
+    a.contact-row:hover { transform: translateX(4px); color: #fff; }
+    a.contact-row .icon { width:24px;height:24px;object-fit:cover;border-radius:50%; display:inline-block; filter: grayscale(100%); transition: filter 0.2s; }
+    a.contact-row:hover .icon { filter: grayscale(0%); }
+  </style>
+</head>
+
+<body>
+  <div class="bg-wrap" aria-hidden="true"></div>
+  <div class="bg-overlay" aria-hidden="true"></div>
+
+  <main class="container" role="main">
+
+    <section class="left">
+
+      <header class="row">
+        <div style="display:flex;align-items:center;gap:20px;min-width:0">
+          <div class="avatar">
+            <img src="priyesh.jpg" alt="Priyesh Choudhary portrait" />
+          </div>
+          <div style="min-width:0">
+            <h1 style="margin:0">
+              <span class="name-wrap spin-container" id="nameWrap" tabindex="0" role="button" aria-pressed="false" aria-label="Priyesh Choudhary">
+                <span class="name-text">I'm Priyesh Choudhary</span>
+                <span class="name-pulse" id="namePulse" aria-hidden="true"></span>
+              </span>
+            </h1>
+            <div class="role">Cybersecurity • Pentester • Bug hunter • Quantum Computing • AI</div>
+          </div>
+        </div>
+      </header>
+
+      <div class="panel" aria-labelledby="about-heading">
+        <strong id="about-heading">About</strong>
+        <p class="muted" style="margin:0">I am a B.Tech student passionate about cybersecurity, ethical hacking, and writing clean, functional code in Python and Java. My learning path is hands-on: real challenges from TryHackMe and pentesting practice. I enjoy digging into vulnerabilities, attack paths, and understanding details that make systems secure or weak.</p>
+      </div>
+
+      <div class="panel spin-container rotating-border-panel oval-shape" aria-labelledby="projects-heading">
+        <strong id="projects-heading">Selected Projects</strong>
+        <div class="projects" style="margin-top:14px;">
+          <div class="project" tabindex="0">
+            <h4 style="margin:0 0 6px 0">Web App Pentest</h4>
+            <p class="muted" style="margin:0">E-commerce — Auth bypass & access flaws</p>
+          </div>
+
+          <div class="project" tabindex="0">
+            <h4 style="margin:0 0 6px 0">API Security</h4>
+            <p class="muted" style="margin:0">Fintech — Token & rate-limit testing</p>
+          </div>
+
+          <div class="project" tabindex="0">
+            <h4 style="margin:0 0 6px 0">IoT Firmware</h4>
+            <p class="muted" style="margin:0">Static firmware extraction</p>
+          </div>
+
+          <div class="project" tabindex="0">
+            <h4 style="margin:0 0 6px 0">Red Team Exercise</h4>
+            <p class="muted" style="margin:0">Simulated intrusion & movement</p>
+          </div>
+        </div>
+
+        <div style="margin-top:24px;display:flex;gap:12px;align-items:center;">
+          <div class="holo-wrapper join-wrapper" id="join-wrapper">
+            <button class="join-btn" id="open-join" aria-haspopup="dialog" aria-controls="modal">JOIN WITH ME</button>
+            <div class="holo-effect" id="holo-effect" aria-hidden="true"></div>
+            <div class="holo-pulse" id="holo-pulse" aria-hidden="true"></div>
+          </div>
+          <div class="muted" style="font-size:13px">Let's hack together!</div>
+        </div>
+      </div>
+
+      <div class="panel spin-container rotating-border-panel oval-shape" id="roadmap-section" style="margin-top: 10px;">
+        <div class="section-title">Cybersecurity Roadmap</div>
+        
+        <div class="roadmap-container">
+            <div class="star-hub" title="Cyber Core">
+                <img src="https://img.icons8.com/ios-filled/50/ffffff/network.png" alt="Hub">
+            </div>
+
+            <div class="roadmap-grid">
+                <div class="roadmap-box">
+                    <div class="roadmap-header">
+                       <img src="network.png" alt="Net" class="topic-icon">
+                       <h3>Networking Fundamentals</h3>
+                       <button class="roadmap-btn">View</button>
+                    </div>
+                    <ul class="topics-list">
+                        <li>OSI & TCP/IP Models</li>
+                        <li>IP Addressing</li>
+                        <li>DNS, DHCP, HTTP/S</li>
+                        <li>Common Ports</li>
+                        <li>Wireshark Basics</li>
+                    </ul>
+                </div>
+
+                <div class="roadmap-box">
+                    <div class="roadmap-header">
+                       <img src="linux.png" alt="Linux" class="topic-icon">
+                       <h3>Linux Fundamentals</h3>
+                       <button class="roadmap-btn">View</button>
+                    </div>
+                    <ul class="topics-list">
+                        <li>CLI Basics</li>
+                        <li>File Permissions</li>
+                        <li>Process Management</li>
+                        <li>Bash Scripting</li>
+                        <li>Systemd</li>
+                    </ul>
+                </div>
+
+                 <div class="roadmap-box">
+                    <div class="roadmap-header">
+                       <img src="python.png" alt="Code" class="topic-icon">
+                       <h3>Programming Basics</h3>
+                       <button class="roadmap-btn">View</button>
+                    </div>
+                    <ul class="topics-list">
+                        <li>Python Automation</li>
+                        <li>Bash Scripting</li>
+                        <li>Basic Javascript</li>
+                        <li>Reading Logic</li>
+                    </ul>
+                </div>
+
+                <div class="roadmap-box">
+                    <div class="roadmap-header">
+                       <img src="os.png" alt="Sec" class="topic-icon">
+                       <h3>Security Foundations</h3>
+                       <button class="roadmap-btn">View</button>
+                    </div>
+                    <ul class="topics-list">
+                        <li>CIA Triad</li>
+                        <li>Auth vs Authz</li>
+                        <li>Cryptography</li>
+                        <li>Risk Management</li>
+                    </ul>
+                </div>
+
+                <div class="roadmap-box">
+                    <div class="roadmap-header">
+                       <img src="ds.png" alt="Blue" class="topic-icon">
+                       <h3>Defensive Security</h3>
+                       <button class="roadmap-btn">View</button>
+                    </div>
+                    <ul class="topics-list">
+                        <li>SIEM Fundamentals</li>
+                        <li>IDS / IPS</li>
+                        <li>Analyzing Logs</li>
+                        <li>Firewalls</li>
+                    </ul>
+                </div>
+
+                <div class="roadmap-box">
+                    <div class="roadmap-header">
+                       <img src="ss.png" alt="Web" class="topic-icon">
+                       <h3>Web App Security</h3>
+                       <button class="roadmap-btn">View</button>
+                    </div>
+                    <ul class="topics-list">
+                        <li>OWASP Top 10</li>
+                        <li>Burp Suite</li>
+                        <li>SQL Injection</li>
+                        <li>XSS & CSRF</li>
+                    </ul>
+                </div>
+
+                <div class="roadmap-box">
+                    <div class="roadmap-header">
+                       <img src="os.png" alt="Red" class="topic-icon">
+                       <h3>Offensive Security</h3>
+                       <button class="roadmap-btn">View</button>
+                    </div>
+                    <ul class="topics-list">
+                        <li>Reconnaissance</li>
+                        <li>Scanning (Nmap)</li>
+                        <li>Metasploit</li>
+                        <li>Privilege Esc</li>
+                    </ul>
+                </div>
+
+                <div class="roadmap-box">
+                    <div class="roadmap-header">
+                       <img src="bbp.png" alt="Bug" class="topic-icon">
+                       <h3>Bug Bounty</h3>
+                       <button class="roadmap-btn">View</button>
+                    </div>
+                    <ul class="topics-list">
+                        <li>Platforms (H1/BC)</li>
+                        <li>Program Scope</li>
+                        <li>Recon Methods</li>
+                        <li>Report Writing</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+      </div>
+      </section>
+
+    <aside class="right" aria-label="contact and skills">
+
+      <div class="panel spin-container rotating-border-panel oval-shape">
+        <strong style="margin-bottom:10px; display:block;">Contact</strong>
+        <button class="tile" id="contact-toggle" aria-expanded="false" style="width:100%; text-align:center; font-weight:700; color:#fff;">
+          Open
+        </button>
+        
+        <div id="contact-list" style="display:none; margin-top:12px; flex-direction:column; gap:8px;">
+          <a class="contact-row" href="mailto:krpriyesh80@gmail.com" title="Send email">
+            <img class="icon" src="gmail.png" alt="Email icon">
+            <span>krpriyesh80@gmail.com</span>
+          </a>
+          <div style="display:flex;align-items:center;gap:12px; padding: 6px 0;">
+            <img src="location.png" alt="location" style="width:24px;height:24px;object-fit:cover;border-radius:50%; filter: grayscale(100%);">
+            <span style="color:var(--accent); font-size:13px;">India</span>
+          </div>
+          <a class="contact-row" href="https://www.linkedin.com/in/priyesh-choudhary-581a31283" target="_blank" rel="noopener noreferrer">
+            <img class="icon" src="linkedin.png" alt="LinkedIn icon">
+            <span>priyesh-choudhary...</span>
+          </a>
+          <a class="contact-row" href="https://github.com/priyeshkr18" target="_blank" rel="noopener noreferrer">
+            <img class="icon" src="github.png" alt="GitHub icon">
+            <span>priyeshkr18</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="panel certs spin-container rotating-border-panel oval-shape" aria-labelledby="certs-heading">
+        <strong id="certs-heading" style="margin-bottom:10px; display:block;">Certificates</strong>
+        
+        <button class="tile" id="cert-toggle" aria-expanded="false" style="width:100%; text-align:center; font-weight:700; color:#fff;">
+          Open
+        </button>
+
+        <div id="cert-list" style="display:none; margin-top:10px; flex-direction:column; gap:10px;">
+          <button class="tile" data-type="cert" aria-pressed="false">OSCP — Penetration Testing</button>
+          <button class="tile" data-type="cert" aria-pressed="false">eLearnSecurity — Web App</button>
+          <button class="tile" data-type="cert" aria-pressed="false">CEH — Ethical Hacking</button>
+        </div>
+      </div>
+
+      <div class="panel spin-container rotating-border-panel oval-shape" style="display:flex;flex-direction:column;" aria-labelledby="skills-heading">
+        <strong id="skills-heading" style="margin-bottom:10px; display:block;">Skills</strong>
+        
+        <button class="tile" id="skill-toggle" aria-expanded="false" style="width:100%; text-align:center; font-weight:700; color:#fff;">
+          Open
+        </button>
+
+        <div id="skill-list" style="display:none; flex-direction:column; gap:10px; margin-top:10px;">
+          <button class="tile" data-type="skill" aria-pressed="false">Python — Scripting</button>
+          <button class="tile" data-type="skill" aria-pressed="false">Java — OOP & Backend</button>
+          <button class="tile" data-type="skill" aria-pressed="false">Linux — Sysadmin</button>
+          <button class="tile" data-type="skill" aria-pressed="false">Cybersecurity — Pentesting</button>
+          <button class="tile" data-type="skill" aria-pressed="false">Bug Hunting — Web/API</button>
+          <button class="tile" data-type="skill" aria-pressed="false">Networking — Tools</button>
+        </div>
+      </div>
+
+    </aside>
+
+  </main>
+
+  <div class="modal-backdrop" id="modal">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <h3 id="modal-title">Join the Cyber Community</h3>
+      <div class="tabs">
+        <div class="tab active" data-tab="join">Join</div>
+        <div class="tab" data-tab="login">Login</div>
+      </div>
+
+      <div id="join-panel">
+        <form id="join-form">
+          <div class="form-row">
+            <div class="form-group" style="flex:1">
+              <label for="join-name" class="muted">Name</label>
+              <input id="join-name" type="text" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="join-email" class="muted">Email</label>
+            <input id="join-email" type="email" required />
+          </div>
+          <div class="form-group">
+            <label for="join-why" class="muted">Why would you wanna join?</label>
+            <textarea id="join-why" required></textarea>
+          </div>
+          <div style="display:flex;gap:10px;margin-top:10px;align-items:center">
+            <button class="neon-submit" type="submit">Create / Join</button>
+            <button class="btn" type="button" id="modal-close">Cancel</button>
+          </div>
+        </form>
+      </div>
+
+      <div id="login-panel" style="display:none">
+        <form id="login-form">
+          <div class="form-group">
+            <label for="login-email" class="muted">Email</label>
+            <input id="login-email" type="email" required />
+          </div>
+          <div class="form-group">
+            <label for="login-name" class="muted">Name (for verification)</label>
+            <input id="login-name" type="text" required />
+          </div>
+          <div style="display:flex;gap:10px;margin-top:10px;align-items:center">
+            <button class="neon-submit" type="submit">Login</button>
+            <button class="btn" type="button" id="modal-close-2">Cancel</button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      // --- small helpers ---
+      const openBtn = document.getElementById('open-join');
+      const modal = document.getElementById('modal');
+      const closeBtns = [document.getElementById('modal-close'), document.getElementById('modal-close-2')];
+      const tabs = Array.from(document.querySelectorAll('.tab'));
+      const joinPanel = document.getElementById('join-panel');
+      const loginPanel = document.getElementById('login-panel');
+
+      function openModal(){ modal.style.display='flex'; document.body.style.overflow='hidden'; document.getElementById('join-name').focus(); }
+      function closeModal(){ modal.style.display='none'; document.body.style.overflow='auto'; }
+
+      closeBtns.forEach(b=>b && b.addEventListener('click', closeModal));
+      modal.addEventListener('click', (e)=>{ if(e.target===modal) closeModal(); });
+
+      tabs.forEach(t=>t.addEventListener('click', ()=>{
+        tabs.forEach(x=>x.classList.remove('active'));
+        t.classList.add('active');
+        if(t.dataset.tab==='login'){ joinPanel.style.display='none'; loginPanel.style.display='block'; }
+        else { joinPanel.style.display='block'; loginPanel.style.display='none'; }
+      }));
+
+      // --- HELPER FOR PACKET TOGGLES ---
+      function createPacket(toggleId, listId, showText, hideText) {
+         const btn = document.getElementById(toggleId);
+         const list = document.getElementById(listId);
+         if(!btn || !list) return;
+         btn.addEventListener('click', () => {
+            const isHidden = list.style.display === 'none';
+            if(isHidden) {
+               list.style.display = 'flex';
+               btn.textContent = hideText;
+               btn.classList.add('tapped');
+            } else {
+               list.style.display = 'none';
+               btn.textContent = showText;
+               btn.classList.remove('tapped');
+            }
+         });
+      }
+
+      // Initialize Packets with "Open" text
+      createPacket('contact-toggle', 'contact-list', 'Open', 'Close');
+      createPacket('cert-toggle', 'cert-list', 'Open', 'Close');
+      createPacket('skill-toggle', 'skill-list', 'Open', 'Close');
+
+
+      // --- ROADMAP ACCORDION LOGIC ---
+      const roadmapBtns = document.querySelectorAll('.roadmap-btn');
+
+      document.querySelectorAll('.roadmap-box').forEach(box => {
+          box.addEventListener('click', (e) => {
+             if(e.target.closest('.topics-list')) return;
+
+             const isAlreadyOpen = box.classList.contains('active');
+             
+             document.querySelectorAll('.roadmap-box').forEach(otherBox => {
+                 if(otherBox !== box) {
+                     otherBox.classList.remove('active');
+                     const b = otherBox.querySelector('.roadmap-btn');
+                     if(b) b.textContent = 'View';
+                 }
+             });
+
+             const btn = box.querySelector('.roadmap-btn');
+             if(isAlreadyOpen) {
+                 box.classList.remove('active');
+                 if(btn) btn.textContent = 'View';
+             } else {
+                 box.classList.add('active');
+                 if(btn) btn.textContent = 'Close';
+             }
+          });
+      });
+
+      // --- Join form handling ---
+      const MEMBERS_KEY = 'cyber_members_v1';
+      function loadMembers(){ try{ return JSON.parse(localStorage.getItem(MEMBERS_KEY) || '[]'); }catch(e){return []} }
+      function saveMembers(m){ localStorage.setItem(MEMBERS_KEY, JSON.stringify(m)); }
+
+      document.getElementById('join-form').addEventListener('submit', function(e){
+        e.preventDefault();
+        const name = document.getElementById('join-name').value.trim();
+        const email = document.getElementById('join-email').value.trim().toLowerCase();
+        const why = document.getElementById('join-why').value.trim();
+        if(!name || !email || !why) return alert('Please fill all fields');
+
+        const members = loadMembers();
+        if(members.find(m=>m.email===email)){
+          alert('Seems like this email already joined — try logging in.');
+          return;
+        }
+        members.push({name,email,why,joined:Date.now()});
+        saveMembers(members);
+        closeModal();
+        alert('Welcome to the community, ' + name + '!');
+      });
+
+      document.getElementById('login-form').addEventListener('submit', function(e){
+        e.preventDefault();
+        const email = document.getElementById('login-email').value.trim().toLowerCase();
+        const name = document.getElementById('login-name').value.trim();
+        const members = loadMembers();
+        const found = members.find(m=>m.email===email && m.name.toLowerCase()===name.toLowerCase());
+        if(found){ closeModal(); alert('Logged in as ' + found.name); }
+        else alert('No matching member found. Make sure you joined or check spelling.');
+      });
+
+      // --- Tiles interaction ---
+      const tiles = Array.from(document.querySelectorAll('.tile'));
+      let touchTimeout = null;
+      function addTap(el){ el.classList.add('tapped'); el.setAttribute('aria-pressed','true'); }
+      function removeTap(el){ el.classList.remove('tapped'); el.setAttribute('aria-pressed','false'); }
+      tiles.forEach(tile=>{
+        // Skip toggles
+        if(tile.id === 'contact-toggle' || tile.id === 'cert-toggle' || tile.id === 'skill-toggle') return;
+
+        tile.addEventListener('click', ()=>{ if(tile.classList.contains('tapped')) removeTap(tile); else { addTap(tile); setTimeout(()=>removeTap(tile),700); } });
+        tile.addEventListener('touchstart', function(){ if(touchTimeout) clearTimeout(touchTimeout); addTap(tile); }, {passive:true});
+        tile.addEventListener('touchend', function(){ if(touchTimeout) clearTimeout(touchTimeout); touchTimeout = setTimeout(()=>removeTap(tile),450); }, {passive:true});
+        tile.addEventListener('touchcancel', ()=>removeTap(tile), {passive:true});
+        tile.addEventListener('keydown', function(e){ if(e.key==='Enter' || e.key===' ') { e.preventDefault(); tile.click(); } });
+      });
+
+      // --- HOLO interaction for Join Button ---
+      const holo = document.getElementById('holo-effect');
+      const holoPulse = document.getElementById('holo-pulse');
+      function playJoinHolo() {
+        holo.classList.add('active');
+        holoPulse.classList.remove('play'); void holoPulse.offsetWidth; 
+        holoPulse.classList.add('play');
+        setTimeout(()=>{ holo.classList.remove('active'); }, 900);
+      }
+
+      openBtn.addEventListener('click', function(e){
+        playJoinHolo();
+        setTimeout(()=> openModal(), 230);
+      });
+      openBtn.addEventListener('keydown', function(e){ if(e.key==='Enter' || e.key===' ') { e.preventDefault(); openBtn.click(); } });
+
+      // --- NAME INTERACTION ---
+      const nameWrap = document.getElementById('nameWrap');
+      const namePulse = document.getElementById('namePulse');
+      nameWrap.addEventListener('click', ()=>{
+        const pressed = nameWrap.getAttribute('aria-pressed') === 'true';
+        nameWrap.setAttribute('aria-pressed', String(!pressed));
+        namePulse.classList.remove('play'); void namePulse.offsetWidth;
+        namePulse.classList.add('play');
+      });
+      nameWrap.addEventListener('keydown', (e)=>{
+        if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); nameWrap.click(); }
+      });
+
+    })();
+  </script>
+
+</body>
+</html>
